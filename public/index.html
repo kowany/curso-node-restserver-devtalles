@@ -34,7 +34,7 @@
 
             var url = (window.location.hostname.includes('localhost'))
                 ? 'http://localhost:8080/api/auth/google'
-                : 'https://curso-node-restserver-devtalles-production.up.railway.app';
+                : 'https://curso-node-restserver-devtalles-production.up.railway.app/api/auth/google'
 
             const body = { id_token: response.credential }
 
