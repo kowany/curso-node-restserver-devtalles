@@ -1,170 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Google Signin</title>
-
-        <meta name="google-signin-client_id"
-            content="1023916028923-mnn067lcjn3itrr0lo8oj1s07kddgrcj.apps.googleusercontent.com">
-
-    </head>
-
-    <body>
-        <h1>Google Signin</h1>
-        <hr>
-       
-        <div 
-            id="g_id_onload" data-client_id="199163319361-jrc90f0lim55r2uf85fpprt4vq1eioiq.apps.googleusercontent.com"
-            data-auto_prompt="false"
-            data-callback="handleCredentialResponse">
-        </div>
-        <div 
-            class="g_id_signin"
-            data-type="standard"
-            data-size="large"
-            data-theme="outline"
-            data-text="sign_in_with"
-            data-shape="rectangular"
-            data-logo_alignment="left">
-        </div>
-
-        <button id="google_signout">
-            Signout
-        </button>
-        
-        <script>
-            function handleCredentialResponse(response) {
-                // Google Token || ID_TOKEN
-                // console.log('id_token: ', response.credential)
-                
-                const body = { id_token: response.credential }
-                
-                fetch('http://localhost:8080/api/auth/google', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(body)
-                })
-                .then( resp => resp.json())
-                .then( resp => {
-                    console.log(resp)
-                    localStorage.setItem('email', resp.usuario.correo)
-                })
-                .catch( console.warn )
-            }
-
-            const button = document.getElementById('google_signout')
-
-            button.onclick = () => {
-                console.log(google.accounts.id)
-                google.accounts.id.disableAutoSelect()
-                google.accounts.id.revoke(localStorage.getItem('email'), done => {
-                    localStorage.clear()
-                    location.reload()
-                })
-            }
-            </script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    </body>
-</html>
-
-<!-- client:45 [GSI_LOGGER]: The client ids used by Google Sign In and One Tap should be same or from the same project.
-One Tap may be blocked in the near future if mismatched. -->
-
-<!-- Google Sing In cambió a Google Identity Sign -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Sign-In</title>
+    <title>Google Signin</title>
+
+    <meta name="google-signin-client_id"
+        content="1023916028923-mnn067lcjn3itrr0lo8oj1s07kddgrcj.apps.googleusercontent.com">
+
 </head>
 
 <body>
-    <h1>Google Sign-In</h1>
+    <h1>Google Signin</h1>
     <hr>
 
     <div id="g_id_onload" data-client_id="199163319361-jrc90f0lim55r2uf85fpprt4vq1eioiq.apps.googleusercontent.com"
-        data-callback="handleCredentialResponse" data-auto_prompt="false">
+        data-auto_prompt="false" data-callback="handleCredentialResponse">
     </div>
     <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
         data-shape="rectangular" data-logo_alignment="left">
     </div>
 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <button id="google_signout">
+        Signout
+    </button>
 
     <script>
         function handleCredentialResponse(response) {
+            // Google Token || ID_TOKEN
+            // console.log('id_token: ', response.credential)
+            console.log(window.location.hostname.includes('localhost'))
 
-            // var profile = response.getBasicProfile();
-            // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-            // console.log('Name: ' + profile.getName());
-            // console.log('Image URL: ' + profile.getImageUrl());
-            // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+            var url = (window.location.hostname.includes('localhost'))
+                ? 'http://localhost:8080/api/auth/google'
+                : 'https://curso-node-restserver-devtalles-production.up.railway.app';
 
-            // var id_token = googleUser.getAuthResponse().id_token;
-            // const data = { id_token };
             const body = { id_token: response.credential }
-            const url = 'http://localhost:8080/api/auth/google'
-            
+
             fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(body)
             })
                 .then(resp => resp.json())
-                .then(data => console.log('Nuestro server', data))
-                .catch(console.log);
-
+                .then(data => {
+                    console.log('Nuestro server: ', data)
+                    localStorage.setItem('email', resp.usuario.correo)
+                })
+                .catch(console.warn)
         }
-        // function handleCredentialResponse(response) {
-        //     //Google Token : ID_TOKEN
-        //     //console.log("ID_TOKEN ", response.credential);
 
-        //     const body = { id_token: response.credential }
+        const button = document.getElementById('google_signout')
 
-        //     fetch('http://localhost:8080/api/auth/google', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(body)
-        //     })
-        //         .then( resp => resp.json())
-        //         .then( resp => {
-        //             console.log(resp)
-        //         })
-        //         .catch(console.warn)
-
-        // }
+        button.onclick = () => {
+            console.log(google.accounts.id)
+            google.accounts.id.disableAutoSelect()
+            google.accounts.id.revoke(localStorage.getItem('email'), done => {
+                localStorage.clear()
+                location.reload()
+            })
+        }
     </script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 
-</html> -->
+</html>
