@@ -30,16 +30,31 @@ const existeCategoriaPorId = async( id ) => {
 }
 
 const existeProductoPorId = async( id ) => {
-    console.log(`El id del producto es: ${id}`)
     const existeProducto = await Producto.findById(id);
     if ( !existeProducto ) {
         throw new Error(`El id ${ id } no existe`);
     }
 }
+
+/***
+ * Validar colecciones permitidas
+ */
+
+const coleccionesPermitidas = ( coleccion = '', colecciones = []) => {
+    const incluida = colecciones.includes( coleccion )
+
+    if (!incluida) {
+        throw new Error(`La coleccion ${coleccion} no es permitida - ${ colecciones }`)
+    }
+
+    return true
+}
+
 module.exports = {
     esRoleValido,
     emailExiste,
     existeUsuarioPorId,
     existeCategoriaPorId,
-    existeProductoPorId
+    existeProductoPorId,
+    coleccionesPermitidas
 }

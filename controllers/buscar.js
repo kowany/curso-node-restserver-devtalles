@@ -80,6 +80,19 @@ const buscarProducto = async( termino = '', res = response ) => {
     });
 }
 
+// search product by category
+
+
+// validate an email with regex and comment each line
+
+function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+// API KEY OPENAI para el programa con Leifer Méndez
+// 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
+
 const buscar = (req, res = response) => {
 
     const { coleccion, termino } = req.params
