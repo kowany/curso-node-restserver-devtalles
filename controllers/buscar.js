@@ -90,8 +90,6 @@ function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
-// API KEY OPENAI para el programa con Leifer Méndez
-// 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
 
 const buscar = (req, res = response) => {
 
